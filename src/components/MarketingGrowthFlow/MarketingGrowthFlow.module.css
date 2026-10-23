@@ -1,0 +1,280 @@
+/* ─────────────────────────────────────────────────────────────
+   MarketingGrowthFlow.module.css
+   ───────────────────────────────────────────────────────────── */
+
+.section {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  overflow: visible;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CENTER HUB
+   ───────────────────────────────────────────────────────────── */
+
+.centerCard {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: centerBreath 3.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes centerBreath {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.025);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   NODE FLOATING
+   ───────────────────────────────────────────────────────────── */
+
+.nodeFloat1 {
+  animation: floatOne 4s ease-in-out infinite;
+}
+
+.nodeFloat2 {
+  animation: floatTwo 4.5s ease-in-out infinite;
+}
+
+.nodeFloat3 {
+  animation: floatThree 3.7s ease-in-out infinite;
+}
+
+.nodeFloat4 {
+  animation: floatFour 4.2s ease-in-out infinite;
+}
+
+.nodeFloat5 {
+  animation: floatFive 3.8s ease-in-out infinite;
+}
+
+.nodeFloat6 {
+  animation: floatSix 4.6s ease-in-out infinite;
+}
+
+@keyframes floatOne {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes floatTwo {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+@keyframes floatThree {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes floatFour {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+@keyframes floatFive {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes floatSix {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PATHS
+   ───────────────────────────────────────────────────────────── */
+
+.basePath {
+  fill: none;
+  stroke: #e8420a;
+  stroke-width: 1;
+  opacity: 0.16;
+  stroke-linecap: round;
+}
+
+.glowPath {
+  fill: none;
+  stroke: #e8420a;
+  stroke-width: 1.3;
+  opacity: 0.32;
+  stroke-linecap: round;
+  filter: url("#pathGlow");
+}
+
+.pathPulse {
+  fill: none;
+  stroke: #e8420a;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+
+  stroke-dasharray: 10 240;
+  stroke-dashoffset: 240;
+
+  animation: pathFlow 2.8s linear infinite;
+}
+
+@keyframes pathFlow {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PARTICLES
+   ───────────────────────────────────────────────────────────── */
+
+.particle {
+  pointer-events: none;
+}
+
+.particleDot {
+  fill: #e8420a;
+  filter: url("#particleGlow");
+}
+
+/* ─────────────────────────────────────────────────────────────
+   NODE CARD
+   ───────────────────────────────────────────────────────────── */
+
+.nodeCard {
+  filter: url("#nodeGlow");
+}
+
+.nodeBackground {
+  fill: #ffffff;
+  stroke: rgba(232, 66, 10, 0.08);
+  stroke-width: 1;
+}
+
+.nodeLabel {
+  fill: #2c2a28;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  font-family:
+    var(--font-inter),
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+}
+
+.connector {
+  fill: #e8420a;
+  filter: url("#particleGlow");
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CENTER BRAND
+   ───────────────────────────────────────────────────────────── */
+
+.centerBrand {
+  fill: #f4f1e8;
+  font-family:
+    var(--font-inter),
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-anchor: middle;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   REDUCED MOTION
+   ───────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .centerCard,
+  .nodeFloat1,
+  .nodeFloat2,
+  .nodeFloat3,
+  .nodeFloat4,
+  .nodeFloat5,
+  .nodeFloat6,
+  .pathPulse {
+    animation: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MOBILE
+   ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .section {
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .section {
+    transform: scale(0.92);
+    transform-origin: center center;
+  }
+}

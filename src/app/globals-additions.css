@@ -1,0 +1,38 @@
+/*
+  ════════════════════════════════════════════════
+  ContentGang Hero Visual — append to globals.css
+  ════════════════════════════════════════════════
+  Paste everything below into src/app/globals.css
+*/
+
+/* ── Orbit ring keyframes ──────────────────────────── */
+@keyframes cg-orbit-cw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes cg-orbit-ccw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* ── Pause orbit animations when reduced-motion ─────── */
+@media (prefers-reduced-motion: reduce) {
+  [style*="cg-orbit-cw"],
+  [style*="cg-orbit-ccw"] {
+    animation-play-state: paused !important;
+  }
+}
+
+/* ── Prevent hero visual from causing overflow ────────── */
+.hero-visual-root {
+  overflow: hidden;
+  contain: layout style;
+}
+
+/* ── Backdrop-blur fallback for unsupported browsers ──── */
+@supports not (backdrop-filter: blur(1px)) {
+  .bg-white\/72 {
+    background-color: rgba(255, 255, 255, 0.92) !important;
+  }
+}
