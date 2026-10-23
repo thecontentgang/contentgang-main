@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState, type CSSProperties, type ElementType } from "react";
+import { useRef, useState, useSyncExternalStore, type CSSProperties, type ElementType } from "react";
 import { motion, useInView, useReducedMotion, type Variants } from "framer-motion";
+import { isLowEndDevice } from "../../lib/device";
 
 export interface SmokeSegment {
   text: string;
@@ -40,6 +41,8 @@ interface SmokeTypeProps {
 type Letter = { ch: string; color?: string; index: number };
 type Token = { type: "space" } | { type: "word"; letters: Letter[] };
 
+const subscribeNever = () => () => {};
+
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 // Deterministic shuffle so server and client render the same order.
@@ -68,6 +71,8 @@ export default function SmokeType({
   const reduceMotion = useReducedMotion();
   const inView = useInView(ref, { once: true, margin: "-10%" });
   const [resetting, setResetting] = useState(false);
+  // Blur filters are costly on weak GPUs: keep the same reveal with a lighter blur and no drifting smoke layer
+  const lowEnd = useSyncExternalStore(subscribeNever, isLowEndDevice, () => false);
 
   const ready = trigger === "mount" || inView;
 
@@ -101,7 +106,7 @@ export default function SmokeType({
   const fullText = lines.map((l) => l.map((s) => s.text).join("")).join(" ");
 
   const letterVariants: Variants = {
-    hidden: { opacity: 0, y: "0.35em", filter: "blur(14px)", color: smokeColor },
+    hidden: { opacity: 0, y: "0.35em", filter: lowEnd ? "blur(5px)" : "blur(14px)", color: smokeColor },
     shown: (d: number) => ({
       opacity: 1,
       y: "0em",
@@ -144,16 +149,18 @@ export default function SmokeType({
                     const final = letter.color ?? color;
                     return (
                       <span key={letter.index} className="relative inline-block">
-                        <motion.span
-                          data-ch={letter.ch}
-                          className="pointer-events-none absolute inset-0 select-none before:content-[attr(data-ch)]"
-                          style={{ color: smokeColor }}
-                          variants={smokeVariants}
-                          initial="hidden"
-                          animate={reduceMotion ? "hidden" : state}
-                          custom={d}
-                        >
-                        </motion.span>
+                        {!lowEnd && (
+                          <motion.span
+                            data-ch={letter.ch}
+                            className="pointer-events-none absolute inset-0 select-none before:content-[attr(data-ch)]"
+                            style={{ color: smokeColor }}
+                            variants={smokeVariants}
+                            initial="hidden"
+                            animate={reduceMotion ? "hidden" : state}
+                            custom={d}
+                          >
+                          </motion.span>
+                        )}
                         <motion.span
                           className="inline-block"
                           style={{ color: final }}

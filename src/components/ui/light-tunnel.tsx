@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, type HTMLAttributes } from 'react';
+import { isLowEndDevice } from '../../lib/device';
 
 export type FlowDirection = 'inward' | 'outward';
 
@@ -405,6 +406,7 @@ const LightTunnel = ({
     };
 
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const lowEnd = isLowEndDevice();
     const pointer = { x: 0, y: 0, inside: false };
     const steer = { x: 0, y: 0 };
     const surge = { age: 10 };
@@ -472,6 +474,11 @@ const LightTunnel = ({
     const frame = (now: number) => {
       raf = 0;
       if (!visible || document.hidden) return;
+      // Low-end devices render at ~30fps; time is still advanced by real elapsed time
+      if (lowEnd && last && now - last < 30) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const s = settingsRef.current;
       const dt = last ? clamp((now - last) / 1000, 0.0005, 0.05) : 1 / 60;
       last = now;
@@ -504,7 +511,7 @@ const LightTunnel = ({
       const s = settingsRef.current;
       const width = Math.max(1, container.clientWidth);
       const height = Math.max(1, container.clientHeight);
-      const ratio = Math.min(s.dpr || window.devicePixelRatio || 1, 2);
+      const ratio = Math.min(s.dpr || window.devicePixelRatio || 1, lowEnd ? 1 : 2);
       canvas.width = Math.max(1, Math.round(width * ratio));
       canvas.height = Math.max(1, Math.round(height * ratio));
       render();

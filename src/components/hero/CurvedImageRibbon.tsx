@@ -254,10 +254,13 @@ export default function CurvedImageRibbon({
   useEffect(() => {
     let animId: number;
     let lastTime = performance.now();
+    let visible = true;
 
     const totalCards = RIBBON_ITEMS.length;
 
     const animate = (time: number) => {
+      // Skip all work while the ribbon is scrolled out of view
+      if (!visible) return;
       const dt = Math.min((time - lastTime) / 16.667, 2.5); // normalize to ~1 at 60fps
       lastTime = time;
 
@@ -338,8 +341,22 @@ export default function CurvedImageRibbon({
 
     animId = requestAnimationFrame(animate);
 
+    const container = containerRef.current;
+    const io = container
+      ? new IntersectionObserver(([entry]) => {
+          const next = entry.isIntersecting;
+          if (next && !visible) {
+            lastTime = performance.now();
+            animId = requestAnimationFrame(animate);
+          }
+          visible = next;
+        })
+      : null;
+    if (container) io?.observe(container);
+
     return () => {
       cancelAnimationFrame(animId);
+      io?.disconnect();
     };
   }, [dimensions, speed]);
 
